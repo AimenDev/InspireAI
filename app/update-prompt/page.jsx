@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import dynamic from 'next/dynamic';
 import Form from "@components/Form"; // Keep your Form import as it is
 
