@@ -6,14 +6,21 @@ import Form from "@components/Form";
 
 const UpdatePrompt = () => {
   const router = useRouter();
-  const { id: promptId } = router.query; // <-- Destructure promptId from query
-
   const [post, setPost] = useState({ prompt: "", tag: "" });
   const [submitting, setIsSubmitting] = useState(false);
+  const [promptId, setPromptId] = useState(null);
+
+  // Ensure router is ready before accessing query
+  useEffect(() => {
+    if (router.isReady) {
+      const { id } = router.query;
+      setPromptId(id); // Set promptId from query
+    }
+  }, [router.isReady, router.query]);
 
   useEffect(() => {
     const getPromptDetails = async () => {
-      if (promptId) { // <-- Ensure promptId is present
+      if (promptId) { // Ensure promptId is present
         const response = await fetch(`/api/prompt/${promptId}`);
         const data = await response.json();
 
