@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router"; // <-- Use router here
-import Form from "@components/Form";
+import { useRouter } from "next/router";
+import dynamic from 'next/dynamic';
+import Form from "@components/Form"; // Keep your Form import as it is
 
 const UpdatePrompt = () => {
   const router = useRouter();
@@ -47,6 +48,9 @@ const UpdatePrompt = () => {
           prompt: post.prompt,
           tag: post.tag,
         }),
+        headers: {
+          'Content-Type': 'application/json' // Make sure to set content type
+        }
       });
 
       if (response.ok) {
