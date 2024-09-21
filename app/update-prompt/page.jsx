@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import dynamic from 'next/dynamic';
+import { useRouter } from "next/router";
+import dynamic from 'next/dynamic'; // Import dynamic
 import Form from "@components/Form"; // Keep your Form import as it is
 
 const UpdatePrompt = () => {
@@ -63,8 +63,11 @@ const UpdatePrompt = () => {
     }
   };
 
+  // Dynamically import the Form component without SSR
+  const DynamicForm = dynamic(() => import("@components/Form"), { ssr: false });
+
   return (
-    <Form
+    <DynamicForm
       type="Edit"
       post={post}
       setPost={setPost}
