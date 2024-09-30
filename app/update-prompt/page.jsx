@@ -11,6 +11,10 @@ const UpdatePrompt = () => {
   const [submitting, setIsSubmitting] = useState(false);
   const [promptId, setPromptId] = useState(null);
 
+
+  if (router.isFallback) {
+    return <div>Loading...</div>
+  }
   // Ensure router is ready before accessing query
   useEffect(() => {
     if (router.isReady) {
