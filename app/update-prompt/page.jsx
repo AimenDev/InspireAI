@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import dynamic from 'next/dynamic'; // Import dynamic
-import Form from "@components/Form"; // Keep your Form import as it is
+import { useRouter } from "next/navigation"; // Change import to next/navigation
+import dynamic from "next/dynamic";
 
 const UpdatePrompt = () => {
   const router = useRouter();
@@ -11,33 +10,28 @@ const UpdatePrompt = () => {
   const [submitting, setIsSubmitting] = useState(false);
   const [promptId, setPromptId] = useState(null);
 
-
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
+
   // Ensure router is ready before accessing query
   useEffect(() => {
-    if (router.isReady) {
-      const { id } = router.query;
-      setPromptId(id); // Set promptId from query
+    const { id } = router.query; // You can get query directly from the router
+
+    if (id) {
+      setPromptId(id);
+      // Fetch prompt details when the promptId is set
+      const getPromptDetails = async () => {
+        const response = await fetch(`/api/prompt/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setPost({ prompt: data.prompt, tag: data.tag });
+        }
+      };
+
+      getPromptDetails();
     }
-  }, [router.isReady, router.query]);
-
-  useEffect(() => {
-    const getPromptDetails = async () => {
-      if (promptId) { // Ensure promptId is present
-        const response = await fetch(`/api/prompt/${promptId}`);
-        const data = await response.json();
-
-        setPost({
-          prompt: data.prompt,
-          tag: data.tag,
-        });
-      }
-    };
-
-    getPromptDetails();
-  }, [promptId]);
+  }, [router]); // Add router to the dependency array
 
   const updatePrompt = async (e) => {
     e.preventDefault();
@@ -53,8 +47,8 @@ const UpdatePrompt = () => {
           tag: post.tag,
         }),
         headers: {
-          'Content-Type': 'application/json' // Make sure to set content type
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       if (response.ok) {
